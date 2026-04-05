@@ -2,54 +2,62 @@ import React, { useState } from "react";
 import { Button, Row, Col } from "react-bootstrap";
 
 const PEOPLE = [
-    "Alan Turing",
-    "Grace Hopper",
-    "Ada Lovelace",
-    "Charles Babbage",
-    "Barbara Liskov",
-    "Margaret Hamilton",
+  "Alan Turing",
+  "Grace Hopper",
+  "Ada Lovelace",
+  "Charles Babbage",
+  "Barbara Liskov",
+  "Margaret Hamilton",
 ];
 
 export function ChooseTeam(): React.JSX.Element {
-    const [allOptions, setAllOptions] = useState<string[]>(PEOPLE);
-    const [team, setTeam] = useState<string[]>([]);
+  const [allOptions, setAllOptions] = useState<string[]>(PEOPLE);
+  const [team, setTeam] = useState<string[]>([]);
 
-    function chooseMember() {
-        /*
-        if (!team.includes(newMember)) {
-            team.push(newMember);
-        }
-        */
+  function chooseMember(newMember: string) {
+    if (!team.includes(newMember)) {
+      const newTeam = [...team, newMember];
+      setTeam(newTeam);
+      const options = allOptions.filter(
+        (person: string): boolean => person != newMember,
+      );
+      setAllOptions(options);
     }
+  }
 
-    function clearTeam() {
-        /*
-        team = [];
-        */
-    }
+  function clearTeam() {
+    const newTeam: string[] = [];
+    setTeam(newTeam);
+    setAllOptions(PEOPLE);
+  }
 
-    return (
-        <div>
-            <h3>Choose Team</h3>
-            <Row>
-                <Col>
-                    {allOptions.map((option: string) => (
-                        <div key={option} style={{ marginBottom: "4px" }}>
-                            Add{" "}
-                            <Button onClick={chooseMember} size="sm">
-                                {option}
-                            </Button>
-                        </div>
-                    ))}
-                </Col>
-                <Col>
-                    <strong>Team:</strong>
-                    {team.map((member: string) => (
-                        <li key={member}>{member}</li>
-                    ))}
-                    <Button onClick={clearTeam}>Clear Team</Button>
-                </Col>
-            </Row>
-        </div>
-    );
+  return (
+    <div>
+      <h3>Choose Team</h3>
+      <Row>
+        <Col>
+          {allOptions.map((option: string) => (
+            <div key={option} style={{ marginBottom: "4px" }}>
+              Add{" "}
+              <Button
+                onClick={() => {
+                  chooseMember(option);
+                }}
+                size="sm"
+              >
+                {option}
+              </Button>
+            </div>
+          ))}
+        </Col>
+        <Col>
+          <strong>Team:</strong>
+          {team.map((member: string) => (
+            <li key={member}>{member}</li>
+          ))}
+          <Button onClick={clearTeam}>Clear Team</Button>
+        </Col>
+      </Row>
+    </div>
+  );
 }
